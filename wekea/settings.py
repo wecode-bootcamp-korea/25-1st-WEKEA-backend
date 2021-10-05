@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-PPEND_SLASH = False
+APPEND_SLASH = False
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL  = True
