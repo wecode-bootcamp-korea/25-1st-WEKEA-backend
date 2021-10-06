@@ -19,12 +19,12 @@ class User(models.Model):
         return self.first_name
 
 class Address(models.Model):
-    name_of_street  = models.CharField(max_length = 50)
+    name_of_street = models.CharField(max_length = 50)
     detail_address = models.CharField(max_length = 30)
-    zip_code        = models.IntegerField()
-    default = models.BooleanField()
-    creatd_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+    zip_code       = models.IntegerField()
+    default        = models.BooleanField()
+    creatd_at      = models.DateTimeField(auto_now_add = True)
+    updated_at     = models.DateTimeField(auto_now = True)
 
     class Meta:
         db_tables = 'addresses'
