@@ -1,6 +1,7 @@
 from django.db import models
+from core.models import TimeStampModel
 
-class User(models.Model):
+class User(TimeStampModel):
     last_name      = models.CharField(max_length = 20)
     first_name     = models.CharField(max_length = 20)
     age            = models.PositiveIntegerField()
@@ -17,7 +18,7 @@ class User(models.Model):
     def __str__(self):
         return self.first_name
 
-class Address(models.Model):
+class Address(TimeStampModel):
     name_of_street  = models.CharField(max_length = 50)
     detail_address  = models.CharField(max_length = 20)
     zip_code        = models.IntegerField()
@@ -30,7 +31,7 @@ class Address(models.Model):
     def __str__(self):
         return self.name_of_street
 
-class Review(models.Model):
+class Review(TimeStampModel):
     text             = models.TextField(max_length = 50)
     installation     = models.PositiveIntegerField()
     cost_performance = models.PositiveIntegerField()
@@ -43,7 +44,7 @@ class Review(models.Model):
     class Meta:
         db_table = 'reviews'
 
-class Cart(models.Model):
+class Cart(TimeStampModel):
     user     = models.ForeignKey('User', on_delete = models.CASCADE, related_name = 'carts')
     product  = models.ForeignKey('product.Product', on_delete = models.CASCADE, related_name = 'products')
     quantity = models.IntegerField(default = 0)

@@ -1,6 +1,8 @@
 from django.db import models
 
-class Order(models.Model):
+from core.models import TimeStampModel
+
+class Order(TimeStampModel):
     order_number     = models.CharField(max_length = 100)
     user             = models.ForeignKey('user.User', on_delete = models.CASCADE, related_name = 'orders')
     order_state_code = models.ForeignKey('OrderStatus', on_delete = models.CASCADE, related_name = 'order_statuses')
@@ -12,7 +14,7 @@ class Order(models.Model):
     def __str__(self):
         return '%s %s' % (self.user, self.order_details)
 
-class OrderStatus(models.Model):
+class OrderStatus(TimeStampModel):
     order_status_description = models.CharField(max_length = 20)
 
     class Meta:
@@ -21,7 +23,7 @@ class OrderStatus(models.Model):
     def __str__(self):
         return self.order_status_description
 
-class Shipment(models.Model):
+class Shipment(TimeStampModel):
     shipment_tracking_number = models.IntegerField()
     other_shipment_details   = models.CharField(max_length = 20)
     order                    = models.ForeignKey('Order', on_delete = models.CASCADE, related_name = 'shipments')
@@ -32,7 +34,7 @@ class Shipment(models.Model):
     def __str__(self):
         return '%s %s' % (self.shipment_tracking_number, self.other_shipment_details)
 
-class OrderItem(models.Model):
+class OrderItem(TimeStampModel):
     order                    = models.ForeignKey('Order', on_delete = models.CASCADE, related_name = 'order_items')
     product                  = models.ForeignKey('product.Product', on_delete = models.CASCADE, related_name = 'order_items')
     order_item_status        = models.ForeignKey('OrderItemStatus', on_delete = models.CASCADE, related_name = 'order_items')
@@ -48,7 +50,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return '%s %s %s' % (self.order, self.order_item_quantity, self.order_item_price)
 
-class OrderItemStatus(models.Model):
+class OrderItemStatus(TimeStampModel):
     order_item_status = models.CharField(max_length = 20)
 
     class Meta:
@@ -57,7 +59,7 @@ class OrderItemStatus(models.Model):
     def __str__(self):
         return self.order_item_status
 
-class ShipmentItem(models.Model):
+class ShipmentItem(TimeStampModel):
     order_item = models.ForeignKey('OrderItem', on_delete = models.CASCADE, related_name = 'shipment_items')
     shipment   = models.ForeignKey('Shipment', on_delete = models.CASCADE, related_name = 'shipment_items')
     
