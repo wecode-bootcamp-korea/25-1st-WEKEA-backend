@@ -50,7 +50,7 @@ class Review(models.Model):
 
 class Cart(models.Model):
     user       = models.OneToOneField('User', on_delete = models.CASCADE, related_name = 'cart')
-    product    = models.ManyToManyField('product.Product',related_name = 'product', through = 'Cart_Product')
+    product    = models.ManyToManyField('product.Product', related_name = 'product', through = 'Cart_Product')
     quantity   = models.IntegerField()
     creatd_at  = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
@@ -59,8 +59,8 @@ class Cart(models.Model):
         db_table = 'carts'
 
 class Cart_Product(models.Model):
-    product    = models.ForeignKey('product.Product', related_name = 'product')
-    user       = models.ForeignKey('User', related_name = 'user')
+    product    = models.ForeignKey('product.Product',on_delete = models.CASCADE, related_name = 'product')
+    user       = models.ForeignKey('User', on_delete = models.CASCADE, related_name = 'user')
     creatd_at  = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
