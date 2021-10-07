@@ -39,7 +39,7 @@ class Shipment(models.Model):
 
 class OrderItem(models.Model):
     order                    = models.ForeignKey('Order', on_delete = models.CASCADE, related_name = 'order_item')
-    product                  = models.ForeignKey('Product', on_delete = models.CASCADE, related_name = 'order_item')
+    product                  = models.ForeignKey('product.Product', on_delete = models.CASCADE, related_name = 'order_item')
     order_item_status        = models.ForeignKey('OrderItemStatus', on_delete = models.CASCADE, related_name = 'order_item')
     order_item_quantity      = models.DecimalField(max_digits = 10, decimal_places = 2)
     order_item_price         = models.DecimalField(max_digits = 10, decimal_places = 2)
@@ -67,7 +67,7 @@ class OrderItemStatus(models.Model):
         return self.order_item_status
 
 class ShipmentItem(models.Model):
-    order_item = models.ForeignKey('Order_item', on_delete = models.CASCADE, related_name = 'shipment_item')
+    order_item = models.ForeignKey('OrderItem', on_delete = models.CASCADE, related_name = 'shipment_item')
     shipment   = models.ForeignKey('Shipment', on_delete = models.CASCADE, related_name = 'shipment_item')
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)

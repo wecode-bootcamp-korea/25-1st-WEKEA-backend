@@ -63,6 +63,8 @@ CORS_ALLOW_HEADERS = (
 
 INSTALLED_APPS = [
     'user',
+    'product',
+    'order',
     # 'django.contrib.admin',
     # 'django.contrib.auth',
     'django.contrib.contenttypes',

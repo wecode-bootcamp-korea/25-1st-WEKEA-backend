@@ -40,7 +40,7 @@ class Review(models.Model):
     quality         = models.IntegerField()
     exterior        = models.IntegerField()
     functionality   = models.IntegerField()
-    user            = models.ForeignKey('user', on_delete = models.CASCADE)
+    user            = models.ForeignKey('User', on_delete = models.CASCADE)
     product         = models.ForeignKey('product.Product', on_delete = models.CASCADE)
     creatd_at       = models.DateTimeField(auto_now_add = True)
     updated_at      = models.DateTimeField(auto_now = True)
@@ -59,8 +59,8 @@ class Cart(models.Model):
         db_table = 'carts'
 
 class Cart_Product(models.Model):
-    product    = models.ForeignKey('product.Product',on_delete = models.CASCADE, related_name = 'product')
-    user       = models.ForeignKey('User', on_delete = models.CASCADE, related_name = 'user')
+    cart       = models.ForeignKey('Cart', on_delete = models.CASCADE, related_name = 'cart_product')
+    product    = models.ForeignKey('product.Product',on_delete = models.CASCADE, related_name = 'product_cart')
     creatd_at  = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
