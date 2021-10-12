@@ -1,3 +1,68 @@
-from django.shortcuts import render
+import json, re
+import bcrypt
 
-# Create your views here.
+from django.http  import JsonResponse
+from django.db    import transaction
+from django.views import View
+
+from user.models import User, Address
+class SignUp(View):
+    @transaction.atomic
+    def post(self, request):
+        data              = json.loads(request.body)
+        REGX_EMAIL        = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        REGX_PASSWORD     = '^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$'
+        REGX_BIRTHDAY     = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
+        REGX_MOBILE_PHONE = '\d{10,11}$'
+        REGX_ZIP_CODE     = '\d{5}$'
+
+        try:
+            if User.objects.filter(email=data['email']).exists():
+                return JsonResponse({'message': 'EXIST_EMAIL'}, status=400)
+
+            if not re.match(REGX_EMAIL, data['email']):
+                return JsonResponse({'message': 'INVALID_EMAIL_FORM'}, status=400)
+
+            if not re.match(REGX_PASSWORD, data['password']):
+                return JsonResponse({'message': 'INVALID_PASSWORD_FORM'}, status=400)
+
+            if not re.match(REGX_MOBILE_PHONE, data['mobile_phone']):
+                return JsonResponse({'message': 'INVALID_MOBILE_PHONE_FORM'}, status=400)
+
+            if not re.match(REGX_BIRTHDAY, str(data['birthday'])):
+                return JsonResponse({'message': 'INVALID_BIRTHDAY_FORM'}, status=400)
+
+            if not re.match(REGX_ZIP_CODE, str(data['zip_code'])):
+                return JsonResponse({'message': 'INVALID_ZIP_CODE_FORM'}, status=400)
+
+            password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            
+            create_user = User(
+                last_name      = data['last_name'],
+                first_name     = data['first_name'],
+                gender         = data['gender'],
+                email          = data['email'],
+                password       = password,
+                mobile_phone   = data['mobile_phone'],
+                favorite_store = data['favorite_store'],
+                birthday       = data['birthday']
+            )
+            
+            create_user.save()
+
+            create_adderss = Address(
+                user_id         = create_user.id,
+                name_of_street  = data['name_of_street'],
+                detail_address  = data['detail_address'],
+                zip_code        = data['zip_code'],
+                default_address = data['default_address'],
+            )
+            
+            create_adderss.save()
+
+            return JsonResponse({'message': 'SUCCESS'}, status=201)
+        
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
+
