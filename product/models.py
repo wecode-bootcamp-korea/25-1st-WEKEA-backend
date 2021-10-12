@@ -47,9 +47,9 @@ class ProductImage(TimeStampModel):
         db_table = 'product_images'
 
 class ProductSize(TimeStampModel):
-    width      = models.DecimalField(max_digits = 10, decimal_places = 2)
-    length     = models.DecimalField(max_digits = 10, decimal_places = 2)
-    height     = models.DecimalField(max_digits = 10, decimal_places = 2)
+    width      = models.DecimalField(max_digits = 10, decimal_places = 2, null=True)
+    length     = models.DecimalField(max_digits = 10, decimal_places = 2, null=True)
+    height     = models.DecimalField(max_digits = 10, decimal_places = 2, null=True)
     product     = models.ForeignKey('Product', on_delete = models.CASCADE, related_name = 'product_sizes')
     
     class Meta:
