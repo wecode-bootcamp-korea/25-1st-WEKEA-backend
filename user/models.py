@@ -5,12 +5,11 @@ from core.models import TimeStampModel
 class User(TimeStampModel):
     last_name      = models.CharField(max_length = 20)
     first_name     = models.CharField(max_length = 20)
-    age            = models.PositiveIntegerField()
-    gender         = models.BooleanField(null = True)
+    gender         = models.IntegerField(null = False)
     email          = models.EmailField(unique = True)
     password       = models.CharField(max_length = 200)
     mobile_phone   = models.CharField(max_length = 11)
-    favorite_store = models.CharField(max_length = 20)
+    favorite_store = models.IntegerField(null = False)
     birthday       = models.DateField()
     review         = models.ManyToManyField('product.Product', through = 'Review', related_name = 'review')
     cart           = models.ManyToManyField('product.Product', through = 'Cart', related_name = 'cart')
@@ -35,7 +34,7 @@ class Address(TimeStampModel):
         return self.name_of_street
 
 class Review(TimeStampModel):
-    text             = models.TextField(max_length = 50)
+    text             = models.TextField()
     installation     = models.PositiveIntegerField()
     cost_performance = models.PositiveIntegerField()
     quality          = models.PositiveIntegerField()
