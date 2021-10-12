@@ -29,10 +29,10 @@ class SignUp(View):
             if not re.match(REGX_MOBILE_PHONE, data['mobile_phone']):
                 return JsonResponse({'message': 'INVALID_MOBILE_PHONE_FORM'}, status=400)
 
-            if not re.match(REGX_BIRTHDAY, str(data['birthday'])):
+            if not re.match(REGX_BIRTHDAY, data['birthday']):
                 return JsonResponse({'message': 'INVALID_BIRTHDAY_FORM'}, status=400)
 
-            if not re.match(REGX_ZIP_CODE, str(data['zip_code'])):
+            if not re.match(REGX_ZIP_CODE, data['zip_code']):
                 return JsonResponse({'message': 'INVALID_ZIP_CODE_FORM'}, status=400)
 
             password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
