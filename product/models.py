@@ -28,8 +28,9 @@ class Product(TimeStampModel):
     korea_name   = models.CharField(max_length = 20)
     price        = models.DecimalField(max_digits = 10, decimal_places = 2)
     information  = models.CharField(max_length = 30)
+    description  = models.TextField()
     is_deleted   = models.BooleanField(default = False)
-    sub_category     = models.ForeignKey('SubCategory', on_delete = models.CASCADE, related_name = 'products')
+    sub_category = models.ForeignKey('SubCategory', on_delete = models.CASCADE, related_name = 'products')
     
     class Meta:
         db_table = 'products'
@@ -40,15 +41,15 @@ class Product(TimeStampModel):
 class ProductImage(TimeStampModel):
     product_image = models.CharField(max_length = 200)
     is_deleted  = models.BooleanField(default= False)
-    product     = models.ForeignKey('Product', on_delete = models.CASCADE, related_name = 'productImages')
+    product     = models.ForeignKey('Product', on_delete = models.CASCADE, related_name = 'product_images')
     
     class Meta:
         db_table = 'product_images'
 
 class ProductSize(TimeStampModel):
-    width      = models.DecimalField(max_digits = 10, decimal_places = 2)
-    length     = models.DecimalField(max_digits = 10, decimal_places = 2)
-    height     = models.DecimalField(max_digits = 10, decimal_places = 2)
+    width      = models.DecimalField(max_digits = 10, decimal_places = 2, null=True)
+    length     = models.DecimalField(max_digits = 10, decimal_places = 2, null=True)
+    height     = models.DecimalField(max_digits = 10, decimal_places = 2, null=True)
     product     = models.ForeignKey('Product', on_delete = models.CASCADE, related_name = 'product_sizes')
     
     class Meta:
