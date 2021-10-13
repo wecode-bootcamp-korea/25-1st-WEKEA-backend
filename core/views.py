@@ -7,12 +7,12 @@ from django.conf.global_settings import SECRET_KEY
 
 from user.models import User 
 
-def check_login(func):
+def login_require(func):
     def wrapper(self, request, *args, **kwargs):
         try:
             access_token = request.headers.get('Authrozation', None)
             payload = jwt.decode(access_token, SECRET_KEY, algorithms = 'HS256')
-            user = User.objects.get(email = payload['email'])
+            user = User.objects.get(id = payload['id'])
             request.user = user
 
         except jwt.exceptions.DecodeError:
