@@ -28,7 +28,7 @@ class Product(TimeStampModel):
     korea_name   = models.CharField(max_length = 20)
     price        = models.DecimalField(max_digits = 10, decimal_places = 2)
     information  = models.CharField(max_length = 30)
-    description  = models.TextField()
+    description  = models.TextField(default='')
     is_deleted   = models.BooleanField(default = False)
     sub_category = models.ForeignKey('SubCategory', on_delete = models.CASCADE, related_name = 'products')
     
