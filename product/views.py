@@ -49,7 +49,7 @@ class ProductView(View):
     def get(self, request, product_id):
         product = Product.objects.get(id = product_id)
 
-        result = [{
+        result = {
             "id"            : product.id,
             "foreign_name"  : product.foreign_name,
             "korea_name"    : product.korea_name,
@@ -84,7 +84,7 @@ class ProductView(View):
                     "length" : size.length,
                     "height" : size.height,
                 } for size in product.product_sizes.all()]
-        }]
+        }
 
         return JsonResponse({'product' : result}, status = 200)
 
