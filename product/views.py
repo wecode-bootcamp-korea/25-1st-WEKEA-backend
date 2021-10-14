@@ -42,6 +42,12 @@ class ProductListView(View):
                 } for size in product.product_sizes.all()] 
         } for product in products]
 
+        result['sub_category'] = {
+                "id"   : products.sub_category.id,
+                "name" : products.sub_category.name,
+                "description" : products.sub_category.description,
+            },
+
         return JsonResponse({"products": result}, status = 201)
 
 class ProductView(View):
