@@ -22,7 +22,7 @@ class SubCategory(TimeStampModel):
     
     def __str__(self):
         return self.name
-        
+
 class Product(TimeStampModel):
     foreign_name = models.CharField(max_length = 20)
     korea_name   = models.CharField(max_length = 20)
@@ -31,7 +31,6 @@ class Product(TimeStampModel):
     description  = models.TextField(default='')
     is_deleted   = models.BooleanField(default = False)
     sub_category = models.ForeignKey('SubCategory', on_delete = models.CASCADE, related_name = 'products')
-    
     class Meta:
         db_table = 'products'
     
