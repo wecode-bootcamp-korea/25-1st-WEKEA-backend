@@ -29,6 +29,7 @@ class ProductListView(View):
         result = [{
             "product_id"   : product.id,
             "foreign_name" : product.foreign_name,
+            "korea_name" : product.korea_name,
             "information"  : product.information,
             "price"        : product.price,
             "images"       : [{
