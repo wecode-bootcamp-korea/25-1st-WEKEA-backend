@@ -24,12 +24,12 @@ class ProductListView(View):
     def get(self, request):
         sub_category_id = int(request.GET.get('sub_category_id', None))
         products = Product.objects.filter(sub_category_id = sub_category_id)
-        sub_category = SubCategory.objects.get(id = sub_category_id)
+        sub_category = products.first().sub_category
 
-        result = [{
+        products = [{
             "product_id"   : product.id,
             "foreign_name" : product.foreign_name,
-            "korea_name" : product.korea_name,
+            "korea_name"   : product.korea_name,
             "information"  : product.information,
             "price"        : product.price,
             "images"       : [{
@@ -44,16 +44,16 @@ class ProductListView(View):
                 } for size in product.product_sizes.all()] 
         } for product in products]
 
-        result.append(
-            {'subcategory': {
-                "id"          : products.first().sub_category.id,
-                "name"        : products.first().sub_category.name,
-                "description" : products.first().sub_category.description,
-                }
-            }
-        )
-
-        return JsonResponse({"products": result}, status = 201)
+        results = {
+            "subcategory" : {
+                "id"          : sub_category.id,
+                "name"        : sub_category.name,
+                "description" : sub_category.description,
+            },
+            "products"    : products
+        }
+        
+        return JsonResponse({"results" : results}, status = 200)
 
 class ProductView(View):
     def get(self, request, product_id):
