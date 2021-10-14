@@ -46,8 +46,8 @@ class ProductListView(View):
         return JsonResponse({"products": result}, status = 201)
 
 class ProductView(View):
-    def get(self, request, productid):
-        product = Product.objects.get(id = productid)
+    def get(self, request, product_id):
+        product = Product.objects.get(id = product_id)
 
         result = [{
             "id"            : product.id,
@@ -56,11 +56,11 @@ class ProductView(View):
             "price"         : product.price,
             "information"   : product.information,
             "description"   : product.description,
-            "main_cateogry" : {
+            "main_category" : {
                 "id"   : product.sub_category.main_category.id,
                 "name" : product.sub_category.main_category.name,
             },
-            "sub_cateogry"  : {
+            "sub_category"  : {
                 "id"   : product.sub_category.id,
                 "name" : product.sub_category.name,
                 "description" : product.sub_category.description,
