@@ -1,10 +1,61 @@
 import json
 
-from django.http import JsonResponse
-from django.views import View
+from django.db.models.query_utils import Q
+from django.http                  import JsonResponse
+from django.views                 import View
 
-from product.models import MainCategory, SubCategory, Product
+from product.models import MainCategory, Product
 
+class ProductFilter(View):
+    def get(self, request):
+        sub_category_products = request.GET.get('products_list')
+        sort                  = request.GET.get('sort')
+        search                = request.GET.get('search')
+
+        sort_set = {
+            'best'            : 'id',
+            'price_ascending': 'price',
+            'price_descending': '-price',
+            'name_ascending'   : 'korea_name',
+            'name_descending'  : '-korea_name',
+            'created_ascending': 'created_at',
+            'created_decending': '-created_at',
+        }
+
+        product_list = Q()
+
+        if sub_category_products:
+            product_list.add(Q(sub_category=sub_category_products), Q.AND)
+
+        if search:
+            product_list.add(Q(korea_name__icontains=search)\
+                |Q(sub_category__name__icontains=search), Q.AND)
+
+        products = Product.objects.filter(product_list)\
+            .order_by(sort_set.get(sort, 'id'))
+
+        results = [{
+            'product_id'  : product.id,
+            'korea_name'  : product.korea_name,
+            'foreign_name': product.foreign_name,
+            'price'       : product.price,
+            'information' : product.information,
+            'is_deleted'  : product.is_deleted,
+            'sizes' : [
+                {
+                    "id"    : size.id,
+                    "width" : size.width,
+                    "length": size.length
+                } for size in product.product_sizes.all()
+            ],
+            'images': [
+                {
+                    "product_image": product_images.product_image,
+                } for product_images in product.product_images.all()
+            ] 
+        } for product in products]
+            
+        return JsonResponse({'results': results }, status = 200)
 class CategoryListView(View):
     def get(self, request):
         main_categories = MainCategory.objects.all()
