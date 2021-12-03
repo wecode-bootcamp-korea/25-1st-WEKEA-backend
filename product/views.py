@@ -22,9 +22,21 @@ class CategoryListView(View):
 
 class ProductListView(View):
     def get(self, request):
-        sub_category_id = int(request.GET.get('sub_category_id', None))
-        products = Product.objects.filter(sub_category_id = sub_category_id)
-        sub_category = products.first().sub_category
+        try:
+            sub_category_id = int(request.GET.get('sub_category_id', 1))
+            sub_category = SubCategory.objects.get(id = sub_category_id)
+            products = Product.objects.filter(sub_category_id = sub_category_id).\
+                                    prefetch_related('product_sizes').\
+                                    prefetch_related('product_images')
+
+        except SubCategory.DoesNotExist:
+            return JsonResponse({"message" : "SUB_CATEGORY_DOES_NOT_EXIST"}, status = 400)
+
+        subcategory = {
+            "id"          : sub_category.id,
+            "name"        : sub_category.name,
+            "description" : sub_category.description,
+        }
 
         products = [{
             "product_id"   : product.id,
@@ -45,11 +57,7 @@ class ProductListView(View):
         } for product in products]
 
         results = {
-            "subcategory" : {
-                "id"          : sub_category.id,
-                "name"        : sub_category.name,
-                "description" : sub_category.description,
-            },
+            "subcategory" : subcategory,
             "products"    : products
         }
         
