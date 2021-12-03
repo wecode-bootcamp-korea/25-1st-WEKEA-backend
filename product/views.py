@@ -65,7 +65,12 @@ class ProductListView(View):
 
 class ProductView(View):
     def get(self, request, product_id):
-        product = Product.objects.get(id = product_id)
+        products = Product.objects.filter(id = product_id).select_related('sub_category__main_category')
+
+        if not products.exists():
+            return JsonResponse({"message" : "PRODUCT_DOES_NOT_EXIST"}, status = 400)
+
+        product  = products.first()
 
         result = {
             "id"            : product.id,
