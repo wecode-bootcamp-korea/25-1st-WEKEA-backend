@@ -7,7 +7,7 @@ from product.models import MainCategory, SubCategory, Product
 
 class CategoryListView(View):
     def get(self, request):
-        main_categories = MainCategory.objects.all()
+        main_categories = MainCategory.objects.all().prefetch_related('sub_categories')
 
         result = [{
             "id"   : main_category.id,
@@ -20,7 +20,7 @@ class CategoryListView(View):
 
         return JsonResponse({"main_categories" : result}, status = 200)
 
-class ProductListView(View): 
+class ProductListView(View):
     def get(self, request):
         sub_category_id = int(request.GET.get('sub_category_id', None))
         products = Product.objects.filter(sub_category_id = sub_category_id)
